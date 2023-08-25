@@ -29,6 +29,6 @@ func CreateAuthenticatedFritzBoxClient(config *config.AppConfig) (*fritzbox.Clie
 	endpoint, _ := url.Parse(config.FritzBoxUrl)
 	client.BaseURL = endpoint
 
-	err := client.Auth(config.FritzBoxUsername, config.FritzboxPassword)
+	err := client.Auth(config.FritzBoxUsername, config.FritzBoxPassword)
 	return client, err
 }

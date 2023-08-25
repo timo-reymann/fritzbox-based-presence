@@ -1,0 +1,8 @@
+pkg: static
+dest: ./pkg/static
+fmt: true
+compression:
+  compress: false
+custom:
+  - files:
+      - web/index.html

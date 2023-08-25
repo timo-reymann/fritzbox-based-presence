@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/buildinfo"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/server"
 )
 
 func check(err error) {
@@ -14,18 +15,27 @@ func check(err error) {
 
 // Run the CLI entrypoint
 func Run() {
+	println("Getting build information ...")
+	buildinfo.PrintVersionInfo()
 	// Read config
 	err := config.Read()
-	check(err)
+	if err != nil {
+		println("Error loading configuration: " + err.Error())
+		config.PrintUsage()
+		return
+	}
 
 	// Create client
+	println("Creating Fritz!Box session ...")
 	client, err := fritzbox_requests.CreateAuthenticatedFritzBoxClient(config.Get())
-	check(err)
+	if err != nil {
+		println("Failed to authenticate with Fritz!Box: " + err.Error())
+		return
+	}
 
-	// Get devices
-	netDevices, err := fritzbox_requests.GetNetDevices(client)
-	check(err)
-	for _, device := range netDevices.Data.Active {
-		fmt.Println(device)
+	println("Spinning up server ...")
+	err = server.Start(config.Get(), client)
+	if err != nil {
+		println("Failed to startup server: " + err.Error())
 	}
 }

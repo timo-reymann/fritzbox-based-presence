@@ -5,10 +5,12 @@ import (
 )
 
 type AppConfig struct {
-	FritzBoxUrl        string `required:"true" envconfig:"fb_presence__fritzbox_url"`
-	FritzBoxUsername   string `required:"true" envconfig:"fb_presence__fritzbox_username"`
-	FritzboxPassword   string `required:"true" envconfig:"fb_presence__fritzbox_password"`
-	IgnoreCertificates bool   `required:"false" default:"false" envconfig:"fb_presence__ignore_certificates"`
+	FritzBoxUrl        string                   `required:"true" split_words:"true"`
+	FritzBoxUsername   string                   `required:"true" split_words:"true"`
+	FritzBoxPassword   string                   `required:"true" split_words:"true"`
+	IgnoreCertificates bool                     `required:"false" default:"false" split_words:"true"`
+	DeviceNameMapping  DeviceNameMappingDecoder `required:"true" split_words:"true"`
+	ServerPort         int                      `required:"false" default:"8090"`
 }
 
 var config AppConfig
@@ -16,9 +18,14 @@ var config AppConfig
 // Read from env variables
 func Read() error {
 	c := AppConfig{}
-	err := envconfig.Process("", &c)
+	err := envconfig.Process("fb_presence_", &c)
 	config = c
 	return err
+}
+
+// PrintUsage displays the help for the env vars
+func PrintUsage() {
+	_ = envconfig.Usage("fb_presence_", &AppConfig{})
 }
 
 // Get current app configuration, make sure Read has been called before.

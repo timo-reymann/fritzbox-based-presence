@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Who is home?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        :root {
+            --header-background: #333;
+            --header-color: white;
+            --avatar-background: #d1d5db;
+            --avatar-color: white;
+        }
+
+        header {
+            background: var(--header-background);
+            color: var(--header-color);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .avatar-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            background-color: var(--avatar-background);
+            color: var(--avatar-color);
+            border-radius: 50%;
+            height: 4rem;
+            width: 4rem;
+            font-size: 2rem;
+            margin: 1rem;
+            user-select: none;
+        }
+
+        .users {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            flex-basis: 33.333%;
+            justify-content: center;
+        }
+
+        .user {
+            margin: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+        }
+    </style>
+    <script>
+        const generateRandomColor = () => "#" + Math.floor(Math.random()*16777215).toString(16);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".avatar").forEach(avatar => {
+                avatar.style.backgroundColor = generateRandomColor()
+            })
+        })
+    </script>
+</head>
+<body>
+<header>
+    <h1>Who is home?</h1>
+</header>
+<div class="users">
+    {{ range $user, $devices := .mapping }}
+    <div class="user">
+        <div class="avatar-wrapper"><span class="avatar">{{ slice $user 0 1 }}</span></div>
+        <h2>{{ $user }}</h2>
+        <p>online with {{ len $devices }} device{{ $devices_length := len $devices }}{{ if gt $devices_length 1 }}s{{ end }}
+        </p>
+    </div>
+    {{ end }}
+</div>
+</body>
+</html>
