@@ -116,12 +116,3 @@ workflows:
               only: /.*/
           requires:
             - build
-
-      - update_homebrew_formula:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
-          requires:
-            - create_github_release
