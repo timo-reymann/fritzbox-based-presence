@@ -1,0 +1,4 @@
+github.com/kelseyhightower/envconfig v1.4.0 h1:Im6hONhd3pLkfDFsbRgu68RDNkGF1r3dvMUtDTo2cv8=
+github.com/kelseyhightower/envconfig v1.4.0/go.mod h1:cccZRl6mQpaq41TPp5QxidR+Sa3axMbJDNb//FQX6Gg=
+github.com/philippfranke/go-fritzbox v0.0.0-20150306111818-ef55d262b15a h1:EneZk/IEmOeeB7xMkHJ+ZbHfls1LmHK42JAnQaii27o=
+github.com/philippfranke/go-fritzbox v0.0.0-20150306111818-ef55d262b15a/go.mod h1:BA8XvEAL6rTwM+aC8P6wUjY+/4vSp7WF5CQfSggcCrI=
