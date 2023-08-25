@@ -76,3 +76,12 @@ make build
 
 - writing messages
 - analog signs
+
+## To Do
+
+- [ ] Add password and/or IP protection to protect page and being able to host it externally
+- [ ] Show online and offline users in view
+- [ ] Provide option to customize css colors (alredy prepared with css vars)
+- [ ] Add more documentation about setup and usage
+- [ ] Provide API with more information
+- [ ] Allow usage of custom template
