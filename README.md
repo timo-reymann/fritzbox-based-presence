@@ -85,4 +85,3 @@ make build
 - [ ] Add more documentation about setup and usage
 - [ ] Provide API with more information
 - [ ] Allow usage of custom template
-- [ ] Guests overview

@@ -4,6 +4,8 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
+const GuestsUsername = "Guests"
+
 type AppConfig struct {
 	FritzBoxUrl        string                   `required:"true" split_words:"true"`
 	FritzBoxUsername   string                   `required:"true" split_words:"true"`
@@ -11,6 +13,7 @@ type AppConfig struct {
 	IgnoreCertificates bool                     `required:"false" default:"false" split_words:"true"`
 	DeviceNameMapping  DeviceNameMappingDecoder `required:"true" split_words:"true"`
 	ServerPort         int                      `required:"false" default:"8090"`
+	ShowGuests         bool                     `required:"false" default:"true" split_words:"true"`
 }
 
 var config AppConfig
