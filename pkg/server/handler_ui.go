@@ -15,6 +15,10 @@ func init() {
 var uiTemplate *template.Template
 
 func UIHandler(w http.ResponseWriter, req *http.Request) {
+	if req.URL.Path != "/" {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
 
 	client := getFritzBoxClient(req)
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
