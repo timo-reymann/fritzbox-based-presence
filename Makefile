@@ -26,7 +26,7 @@ create-dist: ## Create dist folder if not already existent
 	@mkdir -p dist/
 
 build-linux: create-dist ## Build binaries for linux
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(BIN_PREFIX)linux-amd64 $(BUILD_ARGS)
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(BIN_PREFIX)linux-amd64 $(BUILD_ARGS)
 	@CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o $(BIN_PREFIX)linux-i386 $(BUILD_ARGS)
 	@CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o $(BIN_PREFIX)linux-arm $(BUILD_ARGS)
 	@CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o $(BIN_PREFIX)linux-arm64 $(BUILD_ARGS)
