@@ -21,7 +21,7 @@ func MapToOnlineUsers(netDevicesRes *NetDevicesResponse, includeOffline bool) Us
 			usersOnline[config.GuestsUsername] = []string{}
 		}
 
-		for username, _ := range config.Get().DeviceNameMapping {
+		for username := range config.Get().DeviceNameMapping {
 			usersOnline[username] = []string{}
 		}
 	}

@@ -9,7 +9,7 @@ import (
 func UserList(w http.ResponseWriter, req *http.Request) {
 	deviceMapping := config.Get().DeviceNameMapping
 	users := make([]string, 0)
-	for user, _ := range deviceMapping {
+	for user := range deviceMapping {
 		users = append(users, user)
 	}
 	util.SendJson(w, users)

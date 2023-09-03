@@ -8,7 +8,7 @@ import (
 
 func createDeviceDummyConfig() {
 	config = AppConfig{DeviceNameMapping: map[string][]string{
-		"foo": []string{
+		"foo": {
 			"laptop",
 		},
 	}}
@@ -18,7 +18,7 @@ func TestIsDeviceFor(t *testing.T) {
 	createDeviceDummyConfig()
 
 	if user := IsDeviceFor("laptop"); user != "foo" {
-		t.Errorf("Expected exisitng device to be mapped to user")
+		t.Errorf("Expected existing device to be mapped to user")
 	}
 
 	if user := IsDeviceFor("tree"); user != "" {
