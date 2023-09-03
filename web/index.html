@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Who is home?</title>
     <style>
+        :root {
+            --header-background: #333;
+            --header-color: white;
+            --avatar-background: #d1d5db;
+            --avatar-color: white;
+            --dark-background: #282727;
+            --dark-color: white;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,11 +23,11 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
 
-        :root {
-            --header-background: #333;
-            --header-color: white;
-            --avatar-background: #d1d5db;
-            --avatar-color: white;
+        @media (prefers-color-scheme: dark) {
+            html {
+                background: var(--dark-background);
+                color: var(--dark-color);
+            }
         }
 
         header {
@@ -31,6 +40,10 @@
         .avatar-wrapper {
             display: flex;
             justify-content: center;
+        }
+
+        .avatar-offline {
+            background-color: rgb(33 33 33) !important;
         }
 
         .avatar {
@@ -63,15 +76,23 @@
             align-content: center;
             justify-content: center;
         }
+
+        .online-text {
+            color: #227922;
+        }
+
+        .offline-text {
+            color: #cf5454;
+        }
     </style>
     <script>
-        const generateRandomColor = () => "#" + Math.floor(Math.random()*16777215).toString(16);
+        const generateRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
 
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".avatar").forEach(avatar => {
-                avatar.style.backgroundColor = generateRandomColor()
-            })
-        })
+                avatar.style.backgroundColor = generateRandomColor();
+            });
+        });
     </script>
 </head>
 <body>
@@ -81,9 +102,15 @@
 <div class="users">
     {{ range $user, $devices := .mapping }}
     <div class="user">
-        <div class="avatar-wrapper"><span class="avatar">{{ slice $user 0 1 }}</span></div>
+        {{ $devices_length := len $devices }}
+        <div class="avatar-wrapper"><span class="avatar {{ if eq $devices_length 0 }}avatar-offline{{ end }}">{{ slice $user 0 1 }}</span>
+        </div>
         <h2>{{ $user }}</h2>
-        <p>online with {{ len $devices }} device{{ $devices_length := len $devices }}{{ if gt $devices_length 1 }}s{{ end }}
+        {{ if gt $devices_length 0 }}
+        <p class="online-text">online with {{ len $devices }} device{{ if gt $devices_length 1 }}s{{ end }}
+            {{ else }}
+        <p class="offline-text">offline</p>
+        {{ end }}
         </p>
     </div>
     {{ end }}
