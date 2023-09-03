@@ -3,7 +3,9 @@ package server
 import (
 	"github.com/philippfranke/go-fritzbox/fritzbox"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/api"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/middleware"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/ui"
 	"net/http"
 	"strconv"
 )
@@ -14,8 +16,8 @@ func Start(config *config.AppConfig, client *fritzbox.Client) error {
 		http.HandleFunc(pattern, middleware.Auth(middleware.Log(middleware.Context(config, client, handler))))
 	}
 
-	registerRoute("/", UIHandler)
-	registerRoute("/api/users-online", UsersOnlineHandler)
+	registerRoute("/", ui.Index)
+	registerRoute("/api/users-online", api.UsersOnline)
 
 	listen := "0.0.0.0:" + strconv.Itoa(config.ServerPort)
 	println("Starting server on :" + listen + " ...")

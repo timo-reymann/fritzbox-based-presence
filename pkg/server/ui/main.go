@@ -1,7 +1,8 @@
-package server
+package ui
 
 import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/server"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/middleware"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/static"
 	"html/template"
@@ -15,7 +16,7 @@ func init() {
 
 var uiTemplate *template.Template
 
-func UIHandler(w http.ResponseWriter, req *http.Request) {
+func Index(w http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/" {
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -24,7 +25,7 @@ func UIHandler(w http.ResponseWriter, req *http.Request) {
 	client := middleware.GetFritzBoxClient(req)
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
 	if err != nil {
-		sendError(w, http.StatusInternalServerError, "Fritz!Box call failed")
+		server.SendError(w, http.StatusInternalServerError, "Fritz!Box call failed")
 	}
 
 	w.Header().Set("Content-Type", "text/html")
@@ -36,6 +37,6 @@ func UIHandler(w http.ResponseWriter, req *http.Request) {
 		"mapping": fritzbox_requests.MapToOnlineUsers(netDevicesRes),
 	})
 	if err != nil {
-		sendError(w, http.StatusInternalServerError, "Rendering failed ("+err.Error()+"), please check template")
+		server.SendError(w, http.StatusInternalServerError, "Rendering failed ("+err.Error()+"), please check template")
 	}
 }
