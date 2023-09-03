@@ -40,12 +40,13 @@ func NewFritzBoxClientWithRefresh(c *fritzbox.Client) FritzBoxClientWithRefresh 
 // it updates the session
 func (c *FritzBoxClientWithRefresh) Do(req *http.Request, v interface{}) (*http.Response, error) {
 	res, err := c.fritzBoxClient.Do(req, v)
+
+	// Retry by authenticating again
 	if !errors.Is(err, fritzbox.ErrExpiredSess) {
-		return nil, err
+		_ = c.fritzBoxClient.Auth(c.username, c.password)
+		res, err = c.fritzBoxClient.Do(req, v)
 	}
 
-	_ = c.fritzBoxClient.Auth(c.username, c.password)
-	res, err = c.fritzBoxClient.Do(req, v)
 	return res, err
 }
 
