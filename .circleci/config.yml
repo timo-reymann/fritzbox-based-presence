@@ -10,6 +10,7 @@ orbs:
   github-cli: circleci/github-cli@2.2.0
   docker: circleci/docker@2.2.0
   codecov: codecov/codecov@3.2.5
+  go: circleci/go@1.8.0
 
 executors:
   go:
@@ -46,9 +47,11 @@ jobs:
     executor: go
     steps:
       - checkout
+      - go/load-cache
       - run:
           name: Build binaries
           command: make build
+      - go/save-cache
       - persist_to_workspace:
           root: ./
           paths:
