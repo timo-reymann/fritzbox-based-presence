@@ -45,7 +45,15 @@ var authMapping = map[string]func(http.ResponseWriter, *http.Request) (bool, boo
 // as something passes the request is processed
 func Auth(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		for _, name := range config.Get().AuthMiddlewareOrder {
+		order := config.Get().AuthMiddlewareOrder
+
+		if len(order) == 0 {
+			println("[auth] No middleware specified, skipping auth")
+			handler(w, req)
+			return
+		}
+
+		for _, name := range order {
 			callback, ok := authMapping[name]
 			if ok {
 				authenticated, abort := callback(w, req)
@@ -54,12 +62,13 @@ func Auth(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWr
 					handler(w, req)
 					return
 				} else if abort {
-					println("[auth] Authenticated failed using " + name + ", aborting.")
+					println("[auth] Authenticated failed using " + name + ", aborting")
 					return
 				}
 			}
 		}
 
+		println("[auth] Access denied")
 		w.WriteHeader(http.StatusForbidden)
 	}
 }
