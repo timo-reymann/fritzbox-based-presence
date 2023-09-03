@@ -52,7 +52,9 @@ jobs:
       - go/load-cache
       - run:
           name: Build binaries
-          command: make build
+          command: |
+            make build -j4
+            make create-checksums
       - go/save-cache
       - persist_to_workspace:
           root: ./

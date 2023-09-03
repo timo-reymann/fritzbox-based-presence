@@ -67,4 +67,4 @@ build-docker: ## Build docker image based on the built linux builds in the dist 
 create-checksums: ## Create checksums for binaries
 	@find ./dist -type f -exec sh -c 'sha256sum {} | cut -d " " -f 1 > {}.sha256' {} \;
 
-build: build-linux build-darwin build-windows build-freebsd build-openbsd create-checksums ## Build binaries for all platform
+build: build-linux build-darwin build-windows build-freebsd build-openbsd ## Build binaries for all platform
