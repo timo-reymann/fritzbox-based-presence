@@ -23,14 +23,10 @@ func isAllowedIP(_ http.ResponseWriter, req *http.Request) (bool, bool) {
 
 func interceptWwwAuthenticate(w http.ResponseWriter, req *http.Request) (bool, bool) {
 	_, password, ok := req.BasicAuth()
-	if !ok {
+	if !ok || password != config.Get().AuthPassword {
 		w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
 		w.WriteHeader(http.StatusUnauthorized)
 		return false, true
-	}
-
-	if password == config.Get().AuthPassword {
-		return true, true
 	}
 
 	return false, false
