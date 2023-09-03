@@ -106,3 +106,4 @@ make build
 
 - writing messages
 - analog signs
+- talking to other people (scary)
