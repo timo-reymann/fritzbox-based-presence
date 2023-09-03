@@ -51,6 +51,7 @@ func Auth(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWr
 
 		for _, name := range order {
 			callback, ok := authMapping[name]
+			println("[auth] Testing authentication " + name)
 			if ok {
 				authenticated, abort := callback(w, req)
 				if authenticated {
