@@ -65,7 +65,7 @@ func indexHtml(w http.ResponseWriter, req *http.Request) {
 
 func asset(w http.ResponseWriter, req *http.Request) {
 	fileName := req.URL.Path[1:]
-	println(fileName)
+	println("[static] Serving " + fileName)
 	file, err := static.ReadFile("web/" + fileName)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
