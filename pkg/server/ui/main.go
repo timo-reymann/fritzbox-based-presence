@@ -39,7 +39,7 @@ func Index(w http.ResponseWriter, req *http.Request) {
 	client := middleware.GetFritzBoxClient(req)
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
 	if err != nil {
-		util.SendError(w, http.StatusInternalServerError, "Fritz!Box call failed")
+		util.SendError(w, http.StatusInternalServerError, err.Error())
 	}
 
 	w.Header().Set("Content-Type", "text/html")

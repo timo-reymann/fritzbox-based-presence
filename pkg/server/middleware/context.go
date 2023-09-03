@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"fmt"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
 	"net/http"
@@ -28,12 +27,6 @@ func Context(config *config.AppConfig, client *fritzbox_requests.FritzBoxClientW
 		client_context := context.WithValue(config_context, contextKeyFritzBoxClient, client)
 		enhancedRequest := originalRequest.WithContext(client_context)
 		*originalRequest = *enhancedRequest
-
-		defer func() {
-			if r := recover(); r != nil {
-				fmt.Println("Recovered in f", r)
-			}
-		}()
 		handler(w, enhancedRequest)
 	}
 }
