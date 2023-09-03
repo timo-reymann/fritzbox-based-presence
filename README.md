@@ -36,7 +36,7 @@ fritzbox-based-presence
   - Navigate to [fritz.box](http://fritz.box) in your browser
   - Login
   - Create a user under `System > Fritz!Box Users`
-  - ![Create user](./.github/images/create-user.png)
+    ![Create user](./.github/images/create-user.png)
   - Create a docker-compose file with the following contents:
     ```yaml
     version: "3.5"
