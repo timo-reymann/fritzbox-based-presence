@@ -9,15 +9,26 @@ const GuestsUsername = "Guests"
 
 // AppConfig represents the configuration for the entire application
 type AppConfig struct {
-	FritzBoxUrl         string                   `required:"true" split_words:"true"`
-	FritzBoxUsername    string                   `required:"true" split_words:"true"`
-	FritzBoxPassword    string                   `required:"true" split_words:"true"`
-	IgnoreCertificates  bool                     `required:"false" default:"false" split_words:"true"`
-	DeviceNameMapping   DeviceNameMappingDecoder `required:"true" split_words:"true"`
-	ServerPort          int                      `required:"false" default:"8090"`
-	ShowGuests          bool                     `required:"false" default:"true" split_words:"true"`
-	AuthIpRange         IpRangeDecoder           `required:"false" default:"192.168.178.0/24"  split_words:"true"`
-	AuthMiddlewareOrder []string                 `required:"false" default:"ip_range"  split_words:"true"`
+	// FritzBoxUrl is the base URL for the Fritz!Box Web UI
+	FritzBoxUrl string `required:"true" split_words:"true"`
+	// FritzBoxUsername to use for logging in
+	FritzBoxUsername string `required:"true" split_words:"true"`
+	// FritzBoxPassword to use for logging in
+	FritzBoxPassword string `required:"true" split_words:"true"`
+	// IgnoreCertificates specifies to ignore SSL certificate validation for the requests to Fritz!Box
+	IgnoreCertificates bool `required:"false" default:"false" split_words:"true"`
+	// DeviceNameMapping is the list of device names to map to given usernames
+	DeviceNameMapping DeviceNameMappingDecoder `required:"true" split_words:"true"`
+	// ServerPort is the HTTP port of the server
+	ServerPort int `required:"false" default:"8090"`
+	// ShowGuests enables the visibility of guest devices, bundled under a pseudo username
+	ShowGuests bool `required:"false" default:"true" split_words:"true"`
+	// AuthMiddlewareOrder is a ordered list, which is followed to authenticate users
+	AuthMiddlewareOrder []string `required:"false" default:"ip_range,www_authenticate"  split_words:"true"`
+	// AuthIpRange is the local IP range to allow direct access to the page
+	AuthIpRange IpRangeDecoder `required:"false" default:"192.168.178.0/24"  split_words:"true"`
+	// AuthPassword is the shared password for WWW-Authenticate to get access
+	AuthPassword string `required:"false" default:"changeme" split_words:"true"`
 }
 
 var config AppConfig
