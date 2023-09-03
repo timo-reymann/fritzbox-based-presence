@@ -13,8 +13,19 @@ func CreateUsersOnlineMapping() UsersOnlineMapping {
 }
 
 // MapToOnlineUsers takes a given net devices response and transforms it into the user mapping
-func MapToOnlineUsers(netDevicesRes *NetDevicesResponse) UsersOnlineMapping {
+func MapToOnlineUsers(netDevicesRes *NetDevicesResponse, includeOffline bool) UsersOnlineMapping {
 	usersOnline := CreateUsersOnlineMapping()
+
+	if includeOffline {
+		if config.Get().ShowGuests {
+			usersOnline[config.GuestsUsername] = []string{}
+		}
+
+		for username, _ := range config.Get().DeviceNameMapping {
+			usersOnline[username] = []string{}
+		}
+	}
+
 	for _, device := range netDevicesRes.Data.Active {
 		user := config.IsDeviceFor(device.Name)
 

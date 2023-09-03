@@ -17,7 +17,9 @@ func Start(config *config.AppConfig, client *fritzbox.Client) error {
 	}
 
 	registerRoute("/", ui.Index)
-	registerRoute("/api/users-online", api.UsersOnline)
+	registerRoute("/api/users", api.UserList)
+	registerRoute("/api/users/online", api.UsersOnline)
+	registerRoute("/api/users/all", api.UsersAll)
 
 	listen := "0.0.0.0:" + strconv.Itoa(config.ServerPort)
 	println("Starting server on :" + listen + " ...")

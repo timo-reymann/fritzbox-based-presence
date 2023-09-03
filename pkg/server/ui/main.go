@@ -2,8 +2,8 @@ package ui
 
 import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
-	"github.com/timo-reymann/fritzbox-based-presence/pkg/server"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/middleware"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/util"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/static"
 	"html/template"
 	"net/http"
@@ -22,10 +22,12 @@ func Index(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	includeOffline := req.URL.Query().Get("include-offline") != "false"
+
 	client := middleware.GetFritzBoxClient(req)
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
 	if err != nil {
-		server.SendError(w, http.StatusInternalServerError, "Fritz!Box call failed")
+		util.SendError(w, http.StatusInternalServerError, "Fritz!Box call failed")
 	}
 
 	w.Header().Set("Content-Type", "text/html")
@@ -34,9 +36,9 @@ func Index(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Last-Modified", time.Now().UTC().Format(http.TimeFormat))
 
 	err = uiTemplate.Execute(w, map[string]interface{}{
-		"mapping": fritzbox_requests.MapToOnlineUsers(netDevicesRes),
+		"mapping": fritzbox_requests.MapToOnlineUsers(netDevicesRes, includeOffline),
 	})
 	if err != nil {
-		server.SendError(w, http.StatusInternalServerError, "Rendering failed ("+err.Error()+"), please check template")
+		util.SendError(w, http.StatusInternalServerError, "Rendering failed ("+err.Error()+"), please check template")
 	}
 }
