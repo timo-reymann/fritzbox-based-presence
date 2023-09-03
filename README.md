@@ -80,7 +80,6 @@ make build
 
 ## To Do
 
-- [ ] Show online and offline users in view
 - [ ] Add more documentation about setup and usage
 - [ ] Provide API with more information
 - [ ] Allow usage of custom template
