@@ -1,7 +1,6 @@
 package fritzbox_requests
 
 import (
-	"github.com/philippfranke/go-fritzbox/fritzbox"
 	"net/url"
 )
 
@@ -17,7 +16,7 @@ type NetDevicesResponse struct {
 }
 
 // GetNetDevices loads all known devices from fritzbox using the specified client
-func GetNetDevices(c *fritzbox.Client) (response *NetDevicesResponse, err error) {
+func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, err error) {
 	v := url.Values{}
 	v.Set("page", "netDev")
 	v.Set("lang", "de")
