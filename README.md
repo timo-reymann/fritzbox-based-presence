@@ -1,6 +1,7 @@
 fritzbox-based-presence
 ===
 [![LICENSE](https://img.shields.io/github/license/timo-reymann/fritzbox-based-presence)](https://github.com/timo-reymann/fritzbox-based-presence/blob/main/LICENSE)
+[![DockerHub Pulls](https://img.shields.io/docker/pulls/timoreymann/fritzbox-based-presence)](https://hub.docker.com/r/timoreymann/fritzbox-based-presence)
 [![Go Report Card](https://goreportcard.com/badge/github.com/timo-reymann/fritzbox-based-presence)](https://goreportcard.com/report/github.com/timo-reymann/fritzbox-based-presence)
 [![CircleCI](https://circleci.com/gh/timo-reymann/fritzbox-based-presence.svg?style=shield)](https://app.circleci.com/pipelines/github/timo-reymann/fritzbox-based-presence)
 [![GitHub Release](https://img.shields.io/github/v/tag/timo-reymann/fritzbox-based-presence?label=version)](https://github.com/timo-reymann/fritzbox-based-presence/releases)
