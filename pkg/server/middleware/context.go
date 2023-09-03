@@ -27,6 +27,7 @@ func Context(config *config.AppConfig, client *fritzbox_requests.FritzBoxClientW
 		config_context := context.WithValue(originalRequest.Context(), contextKeyConfig, config)
 		client_context := context.WithValue(config_context, contextKeyFritzBoxClient, client)
 		enhancedRequest := originalRequest.WithContext(client_context)
+		*originalRequest = *enhancedRequest
 
 		defer func() {
 			if r := recover(); r != nil {
