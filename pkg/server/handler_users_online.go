@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/middleware"
 	"net/http"
 )
 
@@ -11,7 +12,7 @@ func UsersOnlineHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	client := getFritzBoxClient(req)
+	client := middleware.GetFritzBoxClient(req)
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
 	if err != nil {
 		sendError(w, http.StatusInternalServerError, "Fritz!Box call failed")

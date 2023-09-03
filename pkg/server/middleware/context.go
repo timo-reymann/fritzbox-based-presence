@@ -1,4 +1,4 @@
-package server
+package middleware
 
 import (
 	"context"
@@ -11,15 +11,18 @@ import (
 const contextKeyConfig = "config"
 const contextKeyFritzBoxClient = "fritzboxClient"
 
-func getFritzBoxClient(r *http.Request) *fritzbox.Client {
+// GetFritzBoxClient stored in the request
+func GetFritzBoxClient(r *http.Request) *fritzbox.Client {
 	return r.Context().Value(contextKeyFritzBoxClient).(*fritzbox.Client)
 }
 
-func getConfig(r *http.Request) *config.AppConfig {
+// GetConfig returns the config stored in the request
+func GetConfig(r *http.Request) *config.AppConfig {
 	return r.Context().Value(contextKeyConfig).(*config.AppConfig)
 }
 
-func ContextMiddleware(config *config.AppConfig, client *fritzbox.Client, handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
+// Context provides config and Fritz!Box client to the request
+func Context(config *config.AppConfig, client *fritzbox.Client, handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, originalRequest *http.Request) {
 		config_context := context.WithValue(originalRequest.Context(), contextKeyConfig, config)
 		client_context := context.WithValue(config_context, contextKeyFritzBoxClient, client)
