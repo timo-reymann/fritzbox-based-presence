@@ -6,3 +6,4 @@ compression:
 custom:
   - files:
       - web/index.html
+      - web/icon.png
