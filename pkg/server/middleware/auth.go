@@ -29,7 +29,7 @@ func interceptWwwAuthenticate(w http.ResponseWriter, req *http.Request) (bool, b
 		return false, true
 	}
 
-	return false, false
+	return true, false
 }
 
 var authMapping = map[string]func(http.ResponseWriter, *http.Request) (bool, bool){
@@ -52,16 +52,20 @@ func Auth(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWr
 		for _, name := range order {
 			callback, ok := authMapping[name]
 			println("[auth] Testing authentication " + name)
-			if ok {
-				authenticated, abort := callback(w, req)
-				if authenticated {
-					println("[auth] Authenticated using " + name)
-					handler(w, req)
-					return
-				} else if abort {
-					println("[auth] Authenticated failed using " + name + ", aborting")
-					return
-				}
+			if !ok {
+				continue
+			}
+
+			authenticated, abort := callback(w, req)
+			if authenticated {
+				println("[auth] Authenticated using " + name)
+				handler(w, req)
+				return
+			}
+
+			if abort {
+				println("[auth] Authenticated failed using " + name + ", aborting")
+				return
 			}
 		}
 
