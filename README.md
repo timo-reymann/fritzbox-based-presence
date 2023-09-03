@@ -27,13 +27,36 @@ fritzbox-based-presence
 
 ## Installation
 
-- Download latest release and execute it
-- OR use the prebuilt docker images
+- Download [latest release](https://github.com/timo-reymann/fritzbox-based-presence/releases/latest) and spin up the binary as systemd service, screen etc.
+- OR use the prebuilt docker images (see [Usage](#usage) for an full example)
 
 ## Usage
 
 - Create a dedicated Fritz!Box user
-- Start application
+  - Navigate to [fritz.box](http://fritz.box) in your browser
+  - Login
+  - Create a user under `System > Fritz!Box Users`
+  - ![Create user](./.github/images/create-user.png)
+  - Create a docker-compose file with the following contents:
+    ```yaml
+    version: "3.5"
+    services:
+      fritzbox-presence:
+        image: timoreymann/fritzbox-based-presence:latest # check for version to use if you would like to pin it
+        restart: always
+        ports:
+          - <public-port>:8090
+        environment:
+          FB_PRESENCE__SHOW_GUESTS: "true"
+          FB_PRESENCE__FRITZ_BOX_URL: http://192.168.178.1
+          FB_PRESENCE__FRITZ_BOX_USERNAME: <your-user>
+          FB_PRESENCE__FRITZ_BOX_PASSWORD: <your-password>
+          FB_PRESENCE__DEVICE_NAME_MAPPING: Name=device1,device2|Name2=device1
+          FB_PRESENCE__AUTH_PASSWORD: <<password here>>
+    ```
+  - Run `docker compose up -d`
+  - Open your browser at `<host IP>:<public port>`
+  - Optionally add to your DynDNS, cloudflared tunnel etc. to make it available
 
 ## Motivation
 
@@ -82,6 +105,4 @@ make build
 
 ## To Do
 
-- [ ] Add more documentation about setup and usage
-- [ ] Provide API with more information
 - [ ] Allow usage of custom template
