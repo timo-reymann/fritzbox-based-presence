@@ -22,7 +22,8 @@ func Index(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	includeOffline := req.URL.Query().Get("include-offline") != "false"
+	includeOfflineQuery := req.URL.Query().Get("include-offline")
+	includeOffline := includeOfflineQuery != "" && includeOfflineQuery != "false"
 
 	client := middleware.GetFritzBoxClient(req)
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
