@@ -1,20 +1,23 @@
-# Start by building the application.
-FROM golang:1.21 as build
-
-ARG BUILD_TIME
-ARG BUILD_VERSION
-ARG BUILD_COMMIT_REF
-LABEL org.opencontainers.image.created=$BUILD_TIME
-LABEL org.opencontainers.image.version=$BUILD_VERSION
-LABEL org.opencontainers.image.revision=$BUILD_COMMIT_REF
-
-WORKDIR /go/src/app
-COPY . .
-
-RUN go mod download
-RUN CGO_ENABLED=0 go build -o /go/bin/app
+FROM busybox AS bin
+COPY ./dist /binaries
+RUN if [[ "$(arch)" == "x86_64" ]]; then \
+        architecture="amd64"; \
+    else \
+        architecture="arm64"; \
+    fi; \
+    cp /binaries/fritzbox-based-presence_linux-${architecture} /bin/fritzbox-based-presence && \
+    chmod +x /bin/fritzbox-based-presence && \
+    chown 1000:1000 /bin/fritzbox-based-presence
 
 FROM gcr.io/distroless/static-debian11
-
-COPY --from=build /go/bin/app /
-CMD ["/app"]
+LABEL org.opencontainers.image.title="fritzbox-based-presence"
+LABEL org.opencontainers.image.description="Show who is home based on devices connected to FritzBox that are currently online."
+LABEL org.opencontainers.image.ref.name="main"
+LABEL org.opencontainers.image.licenses='GNU GPL v3'
+LABEL org.opencontainers.image.vendor="Timo Reymann <mail@timo-reymann.de>"
+LABEL org.opencontainers.image.authors="Timo Reymann <mail@timo-reymann.de>"
+LABEL org.opencontainers.image.url="https://github.com/timo-reymann/fritzbox-based-presence"
+LABEL org.opencontainers.image.documentation="https://github.com/timo-reymann/fritzbox-based-presence"
+LABEL org.opencontainers.image.source="https://github.com/timo-reymann/fritzbox-based-presence.git"
+COPY --from=bin /bin/fritzbox-based-presence /bin/fritzbox-based-presence
+ENTRYPOINT ["/bin/fritzbox-based-presence"]
