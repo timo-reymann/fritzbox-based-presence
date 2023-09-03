@@ -42,7 +42,7 @@ func (c *FritzBoxClientWithRefresh) Do(req *http.Request, v interface{}) (*http.
 	res, err := c.fritzBoxClient.Do(req, v)
 
 	// Retry by authenticating again
-	if !errors.Is(err, fritzbox.ErrExpiredSess) {
+	if errors.Is(err, fritzbox.ErrExpiredSess) {
 		_ = c.fritzBoxClient.Auth(c.username, c.password)
 		res, err = c.fritzBoxClient.Do(req, v)
 	}
