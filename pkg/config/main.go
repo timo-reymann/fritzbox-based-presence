@@ -29,6 +29,8 @@ type AppConfig struct {
 	AuthIpRange IpRangeDecoder `required:"false" default:"192.168.178.0/24"  split_words:"true"`
 	// AuthPassword is the shared password for WWW-Authenticate to get access
 	AuthPassword string `required:"false" default:"changeme" split_words:"true"`
+	// IndexTemplatePath is the location of a custom UI template to use
+	IndexTemplatePath string `required:"false" split_words:"true"`
 }
 
 var config AppConfig

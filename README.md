@@ -27,40 +27,44 @@ fritzbox-based-presence
 
 ## Installation
 
-- Download [latest release](https://github.com/timo-reymann/fritzbox-based-presence/releases/latest) and spin up the binary as systemd service, screen etc.
+- Download [latest release](https://github.com/timo-reymann/fritzbox-based-presence/releases/latest) and spin up the
+  binary as systemd service, screen etc.
 - OR use the prebuilt docker images (see [Usage](#usage) for an full example)
 
 ## Usage
 
 - Create a dedicated Fritz!Box user
-  - Navigate to [fritz.box](http://fritz.box) in your browser
-  - Login
-  - Create a user under `System > Fritz!Box Users`
-    ![Create user](./.github/images/create-user.png)
-  - Create a docker-compose file with the following contents:
-    ```yaml
-    version: "3.5"
-    services:
-      fritzbox-presence:
-        image: timoreymann/fritzbox-based-presence:latest # check for version to use if you would like to pin it
-        restart: always
-        ports:
-          - <public-port>:8090
-        environment:
-          FB_PRESENCE__SHOW_GUESTS: "true"
-          FB_PRESENCE__FRITZ_BOX_URL: http://192.168.178.1
-          FB_PRESENCE__FRITZ_BOX_USERNAME: <your-user>
-          FB_PRESENCE__FRITZ_BOX_PASSWORD: <your-password>
-          FB_PRESENCE__DEVICE_NAME_MAPPING: Name=device1,device2|Name2=device1
-          FB_PRESENCE__AUTH_PASSWORD: <<password here>>
-    ```
-  - Run `docker compose up -d`
-  - Open your browser at `<host IP>:<public port>`
-  - Optionally add to your DynDNS, cloudflared tunnel etc. to make it available
+    - Navigate to [fritz.box](http://fritz.box) in your browser
+    - Login
+    - Create a user under `System > Fritz!Box Users`
+      ![Create user](./.github/images/create-user.png)
+    - Create a docker-compose file with the following contents:
+      ```yaml
+      version: "3.5"
+      services:
+        fritzbox-presence:
+          image: timoreymann/fritzbox-based-presence:latest # check for version to use if you would like to pin it
+          restart: always
+          ports:
+            - <public-port>:8090
+          environment:
+            FB_PRESENCE__SHOW_GUESTS: "true"
+            FB_PRESENCE__FRITZ_BOX_URL: http://192.168.178.1
+            FB_PRESENCE__FRITZ_BOX_USERNAME: <your-user>
+            FB_PRESENCE__FRITZ_BOX_PASSWORD: <your-password>
+            FB_PRESENCE__DEVICE_NAME_MAPPING: Name=device1,device2|Name2=device1
+            FB_PRESENCE__AUTH_PASSWORD: <<password here>>
+      ```
+    - Run `docker compose up -d`
+    - Open your browser at `<host IP>:<public port>`
+    - Optionally add to your DynDNS, cloudflared tunnel etc. to make it available
+
+> For all available options just run the binary without any required variable set to get an overview, or if you are
+> familliar with go code check the [config sources](./pkg/config/main.go)
 
 ## Motivation
 
-Living togehter can be hard. And knowing who will be home is a nice thing to have.
+Living together can be hard. And knowing who will be home is a nice thing to have.
 
 Manual maintenance with signs or something analog or the good old message is boring, so lets use something a bit more
 reliable.
@@ -84,7 +88,7 @@ To get started please read the [Contribution Guidelines](./CONTRIBUTING.md).
 - [GNU make](https://www.gnu.org/software/make/)
 - [Docker](https://docs.docker.com/get-docker/)
 - [pre-commit](https://pre-commit.com/)
-- Go 1.20
+- Go 1.21
 
 ### Test
 
@@ -102,7 +106,3 @@ make build
 
 - writing messages
 - analog signs
-
-## To Do
-
-- [ ] Allow usage of custom template
