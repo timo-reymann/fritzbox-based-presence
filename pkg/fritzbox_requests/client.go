@@ -2,7 +2,6 @@ package fritzbox_requests
 
 import (
 	"crypto/tls"
-	"errors"
 	"github.com/philippfranke/go-fritzbox/fritzbox"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"net/http"
