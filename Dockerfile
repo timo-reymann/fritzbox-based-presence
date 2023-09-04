@@ -9,7 +9,7 @@ RUN if [[ "$(arch)" == "x86_64" ]]; then \
     chmod +x /bin/fritzbox-based-presence && \
     chown 1000:1000 /bin/fritzbox-based-presence
 
-FROM gcr.io/distroless/static-debian11
+FROM gcr.io/distroless/static-debian11:nonroot
 LABEL org.opencontainers.image.title="fritzbox-based-presence"
 LABEL org.opencontainers.image.description="Show who is home based on devices connected to FritzBox that are currently online."
 LABEL org.opencontainers.image.ref.name="main"
