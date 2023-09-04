@@ -2,6 +2,7 @@ package fritzbox_requests
 
 import (
 	"crypto/tls"
+	"errors"
 	"github.com/philippfranke/go-fritzbox/fritzbox"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"net/http"
@@ -23,16 +24,24 @@ func createHttpClient(ignoreCertificates bool) *http.Client {
 
 type FritzBoxClientWithRefresh struct {
 	fritzBoxClient *fritzbox.Client
+	endpoint       *url.URL
 	username       string
 	password       string
+	httpClient     *http.Client
 }
 
-func NewFritzBoxClientWithRefresh(c *fritzbox.Client) FritzBoxClientWithRefresh {
-	return FritzBoxClientWithRefresh{
-		fritzBoxClient: c,
-		username:       "",
-		password:       "",
+func NewFritzBoxClientWithRefresh(c *http.Client, endpoint *url.URL) FritzBoxClientWithRefresh {
+	refreshClient := FritzBoxClientWithRefresh{
+		httpClient: c,
+		endpoint:   endpoint,
 	}
+	refreshClient.createClient()
+	return refreshClient
+}
+
+func (c *FritzBoxClientWithRefresh) createClient() {
+	c.fritzBoxClient = fritzbox.NewClient(c.httpClient)
+	c.fritzBoxClient.BaseURL = c.endpoint
 }
 
 // Do executes the given request. If it leads to a expired session error
@@ -41,9 +50,13 @@ func (c *FritzBoxClientWithRefresh) Do(req *http.Request, v interface{}) (*http.
 	res, err := c.fritzBoxClient.Do(req, v)
 
 	// Retry by authenticating again
-	if err == fritzbox.ErrExpiredSess {
-		_ = c.fritzBoxClient.Auth(c.username, c.password)
-		res, err = c.fritzBoxClient.Do(req, v)
+	if errors.Is(err, fritzbox.ErrExpiredSess) {
+		err := c.refreshSession()
+		if err != nil {
+			return nil, err
+		}
+
+		return c.fritzBoxClient.Do(req, v)
 	}
 
 	return res, err
@@ -55,6 +68,11 @@ func (c *FritzBoxClientWithRefresh) Auth(username string, password string) error
 	c.username = username
 	c.password = password
 	return c.fritzBoxClient.Auth(username, password)
+}
+
+func (c *FritzBoxClientWithRefresh) refreshSession() error {
+	c.createClient()
+	return c.fritzBoxClient.Auth(c.username, c.password)
 }
 
 // NewRequest creates an API request. A relative URL can be provided
@@ -69,11 +87,8 @@ func (c *FritzBoxClientWithRefresh) NewRequest(method, urlStr string, data url.V
 // CreateAuthenticatedFritzBoxClient generates an fritzbox client based on given configuration.
 // After parsing the url a login is attempted, if that fails an error is returned
 func CreateAuthenticatedFritzBoxClient(config *config.AppConfig) (*FritzBoxClientWithRefresh, error) {
-	fritzboxClient := fritzbox.NewClient(createHttpClient(config.IgnoreCertificates))
-	client := NewFritzBoxClientWithRefresh(fritzboxClient)
-
 	endpoint, _ := url.Parse(config.FritzBoxUrl)
-	fritzboxClient.BaseURL = endpoint
+	client := NewFritzBoxClientWithRefresh(createHttpClient(config.IgnoreCertificates), endpoint)
 
 	err := client.Auth(config.FritzBoxUsername, config.FritzBoxPassword)
 	return &client, err
