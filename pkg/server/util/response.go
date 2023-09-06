@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 )
 
 // SendJson serializes the response
@@ -14,6 +15,7 @@ func SendJson(w http.ResponseWriter, response interface{}) {
 
 // SendError serializes the error response
 func SendError(w http.ResponseWriter, status int, message string) {
+	println("[err] " + strconv.Itoa(status) + ": " + message)
 	w.WriteHeader(status)
 	SendJson(w, struct {
 		Message string `json:"message"`

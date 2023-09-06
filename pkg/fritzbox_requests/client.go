@@ -47,15 +47,13 @@ func (c *FritzBoxClientWithRefresh) createClient() {
 // DoWithRetry executes the given do request for the fritzbox client
 func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, req *http.Request, res *T) error {
 	t := new(T)
-
 	_, err := c.Do(req, t)
 
 	// Retry by authenticating again
 	if errors.Is(err, fritzbox.ErrExpiredSess) {
 		println("[fritzbox] Refresh session")
-		t = new(T)
 		_ = c.refreshSession()
-		_, err = c.Do(req, t)
+		return DoWithRetry(c, req, res)
 	}
 
 	if err == nil {

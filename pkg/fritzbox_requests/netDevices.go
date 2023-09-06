@@ -21,7 +21,6 @@ type NetDevicesResponse struct {
 func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, err error) {
 	v := url.Values{}
 	v.Set("page", "netDev")
-	v.Set("lang", "de")
 	v.Set("xhrId", "cleanup")
 
 	req, err := c.NewRequest("POST", "/data.lua", v)

@@ -60,6 +60,7 @@ func indexHtml(w http.ResponseWriter, req *http.Request) {
 	})
 	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, "Rendering failed ("+err.Error()+"), please check template")
+		return
 	}
 }
 
@@ -74,7 +75,7 @@ func asset(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Cache-Control", "public, max-age=60")
 	w.Header().Set("Expires", time.Now().Add(15*time.Minute).Format(http.TimeFormat))
 	w.Header().Set("Last-Modified", time.Now().UTC().Format(http.TimeFormat))
-	w.Write(file)
+	_, _ = w.Write(file)
 }
 
 func Index(w http.ResponseWriter, req *http.Request) {
@@ -84,6 +85,5 @@ func Index(w http.ResponseWriter, req *http.Request) {
 		asset(w, req)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		return
 	}
 }

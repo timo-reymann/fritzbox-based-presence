@@ -20,7 +20,7 @@ type AppConfig struct {
 	// DeviceNameMapping is the list of device names to map to given usernames
 	DeviceNameMapping DeviceNameMappingDecoder `required:"true" split_words:"true"`
 	// ServerPort is the HTTP port of the server
-	ServerPort int `required:"false" default:"8090"`
+	ServerPort int `required:"false" default:"8090" split-word:"true"`
 	// ShowGuests enables the visibility of guest devices, bundled under a pseudo username
 	ShowGuests bool `required:"false" default:"true" split_words:"true"`
 	// AuthMiddlewareOrder is a ordered list, which is followed to authenticate users
