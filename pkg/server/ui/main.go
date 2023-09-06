@@ -44,9 +44,6 @@ func indexHtml(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	w.Header().Set("Cache-Control", "public, max-age=60")
-	w.Header().Set("Expires", time.Now().Add(1*time.Minute).Format(http.TimeFormat))
-	w.Header().Set("Last-Modified", time.Now().UTC().Format(http.TimeFormat))
 
 	var tpl *template.Template
 	if userUiTemplate != nil {
