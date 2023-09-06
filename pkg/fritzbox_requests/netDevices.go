@@ -30,7 +30,7 @@ func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, 
 	}
 
 	response = &NetDevicesResponse{}
-	err = DoWithRetry(c, response, req)
+	err = DoWithRetry(c, req, response)
 
 	return response, nil
 }

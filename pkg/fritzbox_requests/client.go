@@ -45,7 +45,7 @@ func (c *FritzBoxClientWithRefresh) createClient() {
 }
 
 // DoWithRetry executes the given do request for the fritzbox client
-func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, res *T, req *http.Request) error {
+func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, req *http.Request, res *T) error {
 	t := new(T)
 
 	_, err := c.Do(req, t)
