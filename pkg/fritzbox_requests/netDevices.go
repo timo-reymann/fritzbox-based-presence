@@ -10,7 +10,9 @@ type NetDevicesResponse struct {
 		Active []struct {
 			Mac   string `json:"mac"`
 			Name  string `json:"name"`
-			State string `json:"state"`
+			State struct {
+				Class string `json:"class"`
+			} `json:"state"`
 		} `json:"active"`
 	} `json:"data"`
 }
@@ -28,10 +30,7 @@ func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, 
 	}
 
 	response = &NetDevicesResponse{}
-	_, err = c.Do(req, response)
-	if err != nil {
-		return nil, err
-	}
+	err = DoWithRetry(c, response, req)
 
 	return response, nil
 }

@@ -44,22 +44,32 @@ func (c *FritzBoxClientWithRefresh) createClient() {
 	c.fritzBoxClient.BaseURL = c.endpoint
 }
 
-// Do executes the given request. If it leads to a expired session error
-// it updates the session
-func (c *FritzBoxClientWithRefresh) Do(req *http.Request, v interface{}) (*http.Response, error) {
-	res, err := c.fritzBoxClient.Do(req, v)
+// DoWithRetry executes the given do request for the fritzbox client
+func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, res *T, req *http.Request) error {
+	t := new(T)
+
+	_, err := c.Do(req, t)
 
 	// Retry by authenticating again
 	if errors.Is(err, fritzbox.ErrExpiredSess) {
-		err := c.refreshSession()
-		if err != nil {
-			return nil, err
-		}
-
-		return c.fritzBoxClient.Do(req, v)
+		println("[fritzbox] Refresh session")
+		t = new(T)
+		_ = c.refreshSession()
+		_, err = c.Do(req, t)
 	}
 
-	return res, err
+	if err == nil {
+		*res = *t
+	}
+
+	return err
+}
+
+// Do executes the given request. If it leads to a expired session error
+// it updates the session
+func (c *FritzBoxClientWithRefresh) Do(req *http.Request, v interface{}) (*http.Response, error) {
+	println("[fritzbox] " + req.Method + " " + req.URL.Path)
+	return c.fritzBoxClient.Do(req, v)
 }
 
 // Auth sends a auth request and returns an error, if any. Session is stored

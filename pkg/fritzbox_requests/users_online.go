@@ -29,7 +29,7 @@ func MapToOnlineUsers(netDevicesRes *NetDevicesResponse, includeOffline bool) Us
 	for _, device := range netDevicesRes.Data.Active {
 		user := config.IsDeviceFor(device.Name)
 
-		if config.Get().ShowGuests && device.State == "globe_online_guest" {
+		if config.Get().ShowGuests && device.State.Class == "globe_online_guest" {
 			user = config.GuestsUsername
 		}
 

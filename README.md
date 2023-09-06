@@ -26,7 +26,7 @@ fritzbox-based-presence
 
 ## Requirements
 
-<!-- Add requirements as bullet points if any -->
+- Fritz!OS 7.57+ (they changed the data format inbetween)
 
 ## Installation
 

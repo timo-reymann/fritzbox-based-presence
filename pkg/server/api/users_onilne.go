@@ -12,6 +12,7 @@ func UsersOnline(w http.ResponseWriter, req *http.Request) {
 	netDevicesRes, err := fritzbox_requests.GetNetDevices(client)
 	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	util.SendJson(w, fritzbox_requests.MapToOnlineUsers(netDevicesRes, false))
