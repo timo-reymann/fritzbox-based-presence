@@ -31,6 +31,10 @@ type AppConfig struct {
 	AuthPassword string `required:"false" default:"changeme" split_words:"true"`
 	// IndexTemplatePath is the location of a custom UI template to use
 	IndexTemplatePath string `required:"false" split_words:"true"`
+	// TelegramBotToken is the token to use for doing telegram requests. If it is set telegram messages are read
+	TelegramBotToken string `required:"false" split_words:"true"`
+	// TelegramBotAllowedUsers is the list of usernames allowed to talk to the bot
+	TelegramBotAllowedUsers []string `required:"false" split_words:"true"`
 }
 
 var config AppConfig

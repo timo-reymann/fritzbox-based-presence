@@ -29,7 +29,15 @@ func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, 
 	}
 
 	response = &NetDevicesResponse{}
-	err = DoWithRetry(c, req, response)
+
+	// retry to get active devices as it seems the fritz!box sometimes
+	// returns an empty list for active devices, especially after refreshing
+	// the session.
+	i := 0
+	for i < 2 && response.Data.Active == nil {
+		err = DoWithRetry(c, req, response)
+		i++
+	}
 
 	return response, nil
 }

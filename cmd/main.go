@@ -4,6 +4,7 @@ import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/buildinfo"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/integrations/telegram"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server"
 )
 
@@ -33,9 +34,20 @@ func Run() {
 		return
 	}
 
-	println("Spinning up server ...")
+	// Create telegram client
+	if telegram.IsEnabled() {
+		integration, err := telegram.New()
+		if err != nil {
+			println("[telegram-bot] Failed to start bot feature: " + err.Error())
+		} else {
+			println("[telegram-bot] Listening for messages ...")
+			go integration.ListenForMessages(client)
+		}
+	}
+
+	println("[server] Spinning up ...")
 	err = server.Start(config.Get(), client)
 	if err != nil {
-		println("Failed to startup server: " + err.Error())
+		println("[server] Failed to startup server: " + err.Error())
 	}
 }

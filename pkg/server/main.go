@@ -22,6 +22,6 @@ func Start(config *config.AppConfig, client *fritzbox_requests.FritzBoxClientWit
 	registerRoute("/api/users/all", api.UsersAll)
 
 	listen := "0.0.0.0:" + strconv.Itoa(config.ServerPort)
-	println("Starting server on :" + listen + " ...")
+	println("[server] Starting server on :" + listen + " ...")
 	return http.ListenAndServe(listen, nil)
 }
