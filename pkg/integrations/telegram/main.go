@@ -88,7 +88,7 @@ func getWhoIsHomeResponse(f *fritzbox_requests.FritzBoxClientWithRefresh) string
 	for user, devices := range online {
 		deviceCount := len(devices)
 		devicesText := "device"
-		if deviceCount > 2 {
+		if deviceCount > 1 {
 			devicesText += "s"
 		}
 		response = append(response, "- <b>"+user+"</b> <i>online with "+strconv.Itoa(len(devices))+" "+devicesText+"</i>")
