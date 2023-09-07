@@ -52,7 +52,10 @@ func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, req *http.Request,
 	// Retry by authenticating again
 	if errors.Is(err, fritzbox.ErrExpiredSess) {
 		println("[fritzbox] Refresh session")
-		_ = c.refreshSession()
+		err = c.refreshSession()
+		if err != nil {
+			return err
+		}
 		return DoWithRetry(c, req, res)
 	}
 
