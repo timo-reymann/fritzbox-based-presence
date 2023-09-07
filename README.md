@@ -23,6 +23,7 @@ fritzbox-based-presence
 - show who is currently connected to your home network and online
 - single go binary
 - docker images for all popular platforms
+- Telegram bot support
 
 ## Requirements
 
