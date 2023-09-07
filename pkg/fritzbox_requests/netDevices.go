@@ -39,5 +39,9 @@ func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, 
 		i++
 	}
 
+	if err != nil {
+		return nil, err
+	}
+
 	return response, nil
 }
