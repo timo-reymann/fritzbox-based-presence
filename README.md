@@ -84,6 +84,7 @@ If you want to use the telegram functionality, follow this guide.
    1. `/setcommands`
    2. `@your_bot_name`
    3. ```text
+      start - Establish SkyNet
       home - See who is home
       online - See who is currently connected to your home
       ```

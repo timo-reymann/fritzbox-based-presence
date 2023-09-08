@@ -10,8 +10,12 @@ import (
 	"strings"
 )
 
+const WhatsMyJobGif = tgbotapi.FileURL("https://media.giphy.com/media/Fsn4WJcqwlbtS/giphy.gif")
+const NoOneHomeGif = tgbotapi.FileURL("https://media.giphy.com/media/JNyMgedPfbtwGcX8rw/giphy-downsized-large.gif")
+
 type Integration struct {
-	bot *tgbotapi.BotAPI
+	bot            *tgbotapi.BotAPI
+	fritzBoxClient *fritzbox_requests.FritzBoxClientWithRefresh
 }
 
 func (i *Integration) createAPIClient() error {
@@ -29,8 +33,10 @@ func IsEnabled() bool {
 }
 
 // New telegram client
-func New() (*Integration, error) {
-	integration := Integration{}
+func New(f *fritzbox_requests.FritzBoxClientWithRefresh) (*Integration, error) {
+	integration := Integration{
+		fritzBoxClient: f,
+	}
 	err := integration.createAPIClient()
 	if err != nil {
 		return nil, err
@@ -46,7 +52,48 @@ func (i *Integration) reply(message *tgbotapi.Message, response string) {
 	_, _ = i.bot.Send(msg)
 }
 
-func (i *Integration) ListenForMessages(f *fritzbox_requests.FritzBoxClientWithRefresh) {
+func (i *Integration) send(msg tgbotapi.Chattable) {
+	_, _ = i.bot.Send(msg)
+}
+
+func (i *Integration) sendGif(c *tgbotapi.Chat, url tgbotapi.FileURL) {
+	giphy := tgbotapi.NewVideo(c.ID, url)
+	_, _ = i.bot.Send(giphy)
+}
+
+func (i *Integration) start(update *tgbotapi.Update) {
+	i.reply(update.Message, "Oh hey there! My only purpose is to tell you who is home.")
+	i.sendGif(update.Message.Chat, WhatsMyJobGif)
+}
+
+func (i *Integration) whoIsOnline(u *tgbotapi.Update) {
+	devices, err := fritzbox_requests.GetNetDevices(i.fritzBoxClient)
+	if err != nil {
+		i.reply(u.Message, "💥 Can no list online users, try again later")
+		return
+	}
+
+	online := fritzbox_requests.MapToOnlineUsers(devices, false)
+
+	if len(online) == 0 {
+		i.reply(u.Message, "Oops! Looks like no one is home?")
+		i.sendGif(u.Message.Chat, NoOneHomeGif)
+		return
+	}
+
+	response := []string{"🏡 Currently home:\n"}
+	for user, devices := range online {
+		deviceCount := len(devices)
+		devicesText := "device"
+		if deviceCount > 1 {
+			devicesText += "s"
+		}
+		response = append(response, "- <b>"+user+"</b> <i>online with "+strconv.Itoa(len(devices))+" "+devicesText+"</i>")
+	}
+	i.reply(u.Message, strings.Join(response, "\n"))
+}
+
+func (i *Integration) ListenForMessages() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
@@ -66,8 +113,11 @@ func (i *Integration) ListenForMessages(f *fritzbox_requests.FritzBoxClientWithR
 			}
 
 			switch update.Message.Command() {
+			case "start":
+				i.start(&update)
+				break
 			case "home", "online":
-				i.reply(update.Message, getWhoIsHomeResponse(f))
+				i.whoIsOnline(&update)
 				break
 			default:
 				i.reply(update.Message, "💥 Unknown command "+update.Message.Command())
@@ -75,23 +125,4 @@ func (i *Integration) ListenForMessages(f *fritzbox_requests.FritzBoxClientWithR
 			}
 		}
 	}
-}
-
-func getWhoIsHomeResponse(f *fritzbox_requests.FritzBoxClientWithRefresh) string {
-	devices, err := fritzbox_requests.GetNetDevices(f)
-	if err != nil {
-		return "💥 Can no list online users, try again later"
-	}
-
-	online := fritzbox_requests.MapToOnlineUsers(devices, false)
-	response := []string{"🏡 Currently home:\n"}
-	for user, devices := range online {
-		deviceCount := len(devices)
-		devicesText := "device"
-		if deviceCount > 1 {
-			devicesText += "s"
-		}
-		response = append(response, "- <b>"+user+"</b> <i>online with "+strconv.Itoa(len(devices))+" "+devicesText+"</i>")
-	}
-	return strings.Join(response, "\n")
 }

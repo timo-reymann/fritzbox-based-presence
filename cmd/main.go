@@ -37,12 +37,12 @@ func Run() {
 
 	// Create telegram client
 	if telegram.IsEnabled() {
-		integration, err := telegram.New()
+		integration, err := telegram.New(client)
 		if err != nil {
 			log.Print(log.CompTelegram, "Failed to start bot feature: "+err.Error())
 		} else {
 			log.Print(log.CompTelegram, "Listening for messages ...")
-			go integration.ListenForMessages(client)
+			go integration.ListenForMessages()
 		}
 	}
 
