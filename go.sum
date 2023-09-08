@@ -6,3 +6,5 @@ github.com/philippfranke/go-fritzbox v0.0.0-20150306111818-ef55d262b15a h1:EneZk
 github.com/philippfranke/go-fritzbox v0.0.0-20150306111818-ef55d262b15a/go.mod h1:BA8XvEAL6rTwM+aC8P6wUjY+/4vSp7WF5CQfSggcCrI=
 golang.org/x/net v0.14.0 h1:BONx9s002vGdD9umnlX1Po8vOZmrgH34qlHcD1MfK14=
 golang.org/x/net v0.14.0/go.mod h1:PpSgVXXLK0OxS0F31C1/tv6XNguvCrnXIDrFMspZIUI=
+golang.org/x/net v0.15.0 h1:ugBLEUaxABaB5AJqW9enI0ACdci2RUd4eP51NTBvuJ8=
+golang.org/x/net v0.15.0/go.mod h1:idbUs1IY1+zTqbi8yxTbhexhEEk5ur9LInksu6HrEpk=
