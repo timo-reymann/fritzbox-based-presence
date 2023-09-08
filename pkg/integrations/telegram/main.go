@@ -66,8 +66,7 @@ func (i *Integration) ListenForMessages(f *fritzbox_requests.FritzBoxClientWithR
 			}
 
 			switch update.Message.Command() {
-			case "home":
-			case "online":
+			case "home", "online":
 				i.reply(update.Message, getWhoIsHomeResponse(f))
 				break
 			default:
