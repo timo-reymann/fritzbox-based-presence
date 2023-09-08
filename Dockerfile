@@ -9,7 +9,7 @@ RUN if [[ "$(arch)" == "x86_64" ]]; then \
     chmod +x /bin/fritzbox-based-presence && \
     chown 1000:1000 /bin/fritzbox-based-presence
 
-FROM gcr.io/distroless/static-debian11:nonroot
+FROM scratch
 LABEL org.opencontainers.image.title="fritzbox-based-presence"
 LABEL org.opencontainers.image.description="Show who is home based on devices connected to FritzBox that are currently online."
 LABEL org.opencontainers.image.ref.name="main"
@@ -19,5 +19,6 @@ LABEL org.opencontainers.image.authors="Timo Reymann <mail@timo-reymann.de>"
 LABEL org.opencontainers.image.url="https://github.com/timo-reymann/fritzbox-based-presence"
 LABEL org.opencontainers.image.documentation="https://github.com/timo-reymann/fritzbox-based-presence"
 LABEL org.opencontainers.image.source="https://github.com/timo-reymann/fritzbox-based-presence.git"
+COPY --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=bin /bin/fritzbox-based-presence /bin/fritzbox-based-presence
 ENTRYPOINT ["/bin/fritzbox-based-presence"]
