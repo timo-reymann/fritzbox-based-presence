@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"net"
 	"net/http"
 )
@@ -44,32 +45,32 @@ func Auth(handler func(http.ResponseWriter, *http.Request)) func(http.ResponseWr
 		order := config.Get().AuthMiddlewareOrder
 
 		if len(order) == 0 {
-			println("[auth] No middleware specified, skipping auth")
+			log.Print(log.CompAuth, "No middleware specified, skipping auth")
 			handler(w, req)
 			return
 		}
 
 		for _, name := range order {
 			callback, ok := authMapping[name]
-			println("[auth] Testing authentication " + name)
+			log.Print(log.CompAuth, "Testing authentication "+name)
 			if !ok {
 				continue
 			}
 
 			authenticated, abort := callback(w, req)
 			if authenticated {
-				println("[auth] Authenticated using " + name)
+				log.Print(log.CompAuth, "Authenticated using "+name)
 				handler(w, req)
 				return
 			}
 
 			if abort {
-				println("[auth] Authenticated failed using " + name + ", aborting")
+				log.Print(log.CompAuth, "Authenticated failed using "+name+", aborting")
 				return
 			}
 		}
 
-		println("[auth] Access denied")
+		log.Print(log.CompAuth, "Access denied")
 		w.WriteHeader(http.StatusForbidden)
 	}
 }

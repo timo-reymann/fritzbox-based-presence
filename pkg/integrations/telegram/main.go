@@ -4,6 +4,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"slices"
 	"strconv"
 	"strings"
@@ -38,7 +39,7 @@ func New() (*Integration, error) {
 }
 
 func (i *Integration) reply(message *tgbotapi.Message, response string) {
-	println("[telegram-bot] Reply to user " + message.From.UserName)
+	log.Print(log.CompTelegram, "Reply to user "+message.From.UserName)
 	msg := tgbotapi.NewMessage(message.Chat.ID, response)
 	msg.ParseMode = "HTML"
 	msg.ReplyToMessageID = message.MessageID

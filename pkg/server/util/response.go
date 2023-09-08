@@ -2,6 +2,7 @@ package util
 
 import (
 	"encoding/json"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"net/http"
 	"strconv"
 )
@@ -15,7 +16,7 @@ func SendJson(w http.ResponseWriter, response interface{}) {
 
 // SendError serializes the error response
 func SendError(w http.ResponseWriter, status int, message string) {
-	println("[err] " + strconv.Itoa(status) + ": " + message)
+	log.Print(log.CompServer, "Sending error response: "+strconv.Itoa(status)+" "+message)
 	w.WriteHeader(status)
 	SendJson(w, struct {
 		Message string `json:"message"`

@@ -3,6 +3,7 @@ package ui
 import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/middleware"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/util"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/static"
@@ -19,7 +20,7 @@ func init() {
 	if config.Get().IndexTemplatePath != "" {
 		content, err := os.ReadFile(config.Get().IndexTemplatePath)
 		if err != nil {
-			println("Ignoring invalid index template")
+			log.Print(log.CompCli, "Ignoring invalid index template")
 		}
 		bundledUiTemplate = template.Must(template.New("name").Parse(string(content)))
 	}
@@ -63,7 +64,7 @@ func indexHtml(w http.ResponseWriter, req *http.Request) {
 
 func asset(w http.ResponseWriter, req *http.Request) {
 	fileName := req.URL.Path[1:]
-	println("[static] Serving " + fileName)
+	log.Print(log.CompServer, "Serving static asset "+fileName)
 	file, err := static.ReadFile("web/" + fileName)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)

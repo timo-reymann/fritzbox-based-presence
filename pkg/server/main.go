@@ -3,11 +3,13 @@ package server
 import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/api"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/middleware"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server/ui"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // Start the HTTP server
@@ -21,7 +23,13 @@ func Start(config *config.AppConfig, client *fritzbox_requests.FritzBoxClientWit
 	registerRoute("/api/users/online", api.UsersOnline)
 	registerRoute("/api/users/all", api.UsersAll)
 
-	listen := "0.0.0.0:" + strconv.Itoa(config.ServerPort)
-	println("[server] Starting server on :" + listen + " ...")
-	return http.ListenAndServe(listen, nil)
+	listen := ":" + strconv.Itoa(config.ServerPort)
+	log.Print(log.CompServer, "Starting server on :"+listen+" ...")
+
+	srv := http.Server{
+		Addr:         listen,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	return srv.ListenAndServe()
 }

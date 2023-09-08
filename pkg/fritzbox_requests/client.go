@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/philippfranke/go-fritzbox/fritzbox"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"net/http"
 	"net/url"
 )
@@ -45,18 +46,18 @@ func (c *FritzBoxClientWithRefresh) createClient() {
 }
 
 // DoWithRetry executes the given do request for the fritzbox client
-func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, req *http.Request, res *T) error {
+func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, reqFactory func() *http.Request, res *T) error {
 	t := new(T)
-	_, err := c.Do(req, t)
+	_, err := c.Do(reqFactory(), t)
 
 	// Retry by authenticating again
 	if errors.Is(err, fritzbox.ErrExpiredSess) {
-		println("[fritzbox] Refresh session")
+		log.Print(log.CompFritzbox, "Refresh session")
 		err = c.refreshSession()
 		if err != nil {
 			return err
 		}
-		return DoWithRetry(c, req, res)
+		return DoWithRetry(c, reqFactory, res)
 	}
 
 	if err == nil {
@@ -69,7 +70,7 @@ func DoWithRetry[T interface{}](c *FritzBoxClientWithRefresh, req *http.Request,
 // Do executes the given request. If it leads to a expired session error
 // it updates the session
 func (c *FritzBoxClientWithRefresh) Do(req *http.Request, v interface{}) (*http.Response, error) {
-	println("[fritzbox] " + req.Method + " " + req.URL.Path)
+	log.Print(log.CompFritzbox, req.Method+" "+req.URL.Path)
 	return c.fritzBoxClient.Do(req, v)
 }
 

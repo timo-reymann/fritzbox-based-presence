@@ -1,6 +1,7 @@
 package fritzbox_requests
 
 import (
+	"net/http"
 	"net/url"
 )
 
@@ -19,25 +20,15 @@ type NetDevicesResponse struct {
 
 // GetNetDevices loads all known devices from fritzbox using the specified client
 func GetNetDevices(c *FritzBoxClientWithRefresh) (response *NetDevicesResponse, err error) {
-	v := url.Values{}
-	v.Set("page", "netDev")
-	v.Set("xhrId", "cleanup")
-
-	req, err := c.NewRequest("POST", "/data.lua", v)
-	if err != nil {
-		return nil, err
-	}
-
 	response = &NetDevicesResponse{}
 
-	// retry to get active devices as it seems the fritz!box sometimes
-	// returns an empty list for active devices, especially after refreshing
-	// the session.
-	i := 0
-	for i < 2 && response.Data.Active == nil {
-		err = DoWithRetry(c, req, response)
-		i++
-	}
+	err = DoWithRetry(c, func() *http.Request {
+		v := url.Values{}
+		v.Set("page", "netDev")
+		v.Set("xhrId", "cleanup")
+		req, _ := c.NewRequest("POST", "/data.lua", v)
+		return req
+	}, response)
 
 	if err != nil {
 		return nil, err
