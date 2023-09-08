@@ -37,6 +37,8 @@ fritzbox-based-presence
 
 ## Usage
 
+### Fritz!Box User
+
 - Create a dedicated Fritz!Box user
     - Navigate to [fritz.box](http://fritz.box) in your browser
     - Login
@@ -59,12 +61,38 @@ fritzbox-based-presence
             FB_PRESENCE__DEVICE_NAME_MAPPING: Name=device1,device2|Name2=device1
             FB_PRESENCE__AUTH_PASSWORD: <<password here>>
       ```
-    - Run `docker compose up -d`
-    - Open your browser at `<host IP>:<public port>`
-    - Optionally add to your DynDNS, cloudflared tunnel etc. to make it available
+
+### Start service with docker-compose
+
+- Run `docker compose up -d`
+- Open your browser at `<host IP>:<public port>`
+- Optionally add to your DynDNS, cloudflared tunnel etc. to make it available
 
 > For all available options just run the binary without any required variable set to get an overview, or if you are
-> familliar with go code check the [config sources](./pkg/config/main.go)
+> familiar with go code check the [config sources](./pkg/config/main.go)
+
+### Setup telegram bot
+
+If you want to use the telegram functionality, follow this guide.
+
+1. Create your bot with [@BotFather](https://telegram.me/botfather)
+    1. `/newbot`
+    2. Enter the desired name to be displayed in chats e.g. `My Home Stalker`
+    3. Give it a username ending in `bot` e.g. `my_home_stalker_bot
+    4. Copy the token you get, you will need it later
+2. Set up some sugar
+   1. `/setcommands`
+   2. `@your_bot_name`
+   3. ```text
+      home - See who is home
+      online - See who is currently connected to your home
+      ```
+   4. `/setuserpic`
+   5. Send the bot the profile picture you want to see
+3. Configure the service
+    1. Set the env var `FB_PRESENCE__TELEGRAM_BOT_TOKEN` to the token you received
+    2. Set `FB_PRESENCE__TELEGRAM_BOT_ALLOWED_USERS` to a comma seperated list of users that should be allowed to use
+       the bot
 
 ## Motivation
 
