@@ -13,7 +13,7 @@ fritzbox-based-presence
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=timo-reymann_fritzbox-based-presence&metric=bugs)](https://sonarcloud.io/summary/new_code?id=timo-reymann_fritzbox-based-presence)
 
 <p align="center">
-	<img width="600" src="./.github/images/example.png">
+	<img width="600" src="https://github.com/timo-reymann/fritzbox-based-presence/raw/main/.github/images/example.png">
     <br />
     Show who is home based on devices connected to FritzBox that are currently online.
 </p>
@@ -43,8 +43,9 @@ fritzbox-based-presence
     - Navigate to [fritz.box](http://fritz.box) in your browser
     - Login
     - Create a user under `System > Fritz!Box Users`
-      ![Create user](./.github/images/create-user.png)
+      ![Create user](https://github.com/timo-reymann/fritzbox-based-presence/raw/main/.github/images/create-user.png)
     - Create a docker-compose file with the following contents:
+      
       ```yaml
       version: "3.5"
       services:
@@ -83,13 +84,14 @@ If you want to use the telegram functionality, follow this guide.
 2. Set up some sugar
    1. `/setcommands`
    2. `@your_bot_name`
-   3. ```text
+   3.
+   ```text
       start - Establish SkyNet
       home - See who is home
       online - See who is currently connected to your home
       ```
-   4. `/setuserpic`
-   5. Send the bot the profile picture you want to see
+   5. `/setuserpic`
+   6. Send the bot the profile picture you want to see
 3. Configure the service
     1. Set the env var `FB_PRESENCE__TELEGRAM_BOT_TOKEN` to the token you received
     2. Set `FB_PRESENCE__TELEGRAM_BOT_ALLOWED_USERS` to a comma seperated list of users that should be allowed to use
