@@ -13,7 +13,7 @@ fritzbox-based-presence
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=timo-reymann_fritzbox-based-presence&metric=bugs)](https://sonarcloud.io/summary/new_code?id=timo-reymann_fritzbox-based-presence)
 
 <p align="center">
-	<img width="600" src="https://github.com/timo-reymann/fritzbox-based-presence/raw/main/.github/images/example.png">
+	<img width="600" src="https://raw.githubusercontent.com/timo-reymann/fritzbox-based-presence/main/.github/images/example.png">
     <br />
     Show who is home based on devices connected to FritzBox that are currently online.
 </p>
@@ -43,7 +43,7 @@ fritzbox-based-presence
     - Navigate to [fritz.box](http://fritz.box) in your browser
     - Login
     - Create a user under `System > Fritz!Box Users`
-      ![Create user](https://github.com/timo-reymann/fritzbox-based-presence/raw/main/.github/images/create-user.png)
+      ![Create user](https://raw.githubusercontent.com/timo-reymann/fritzbox-based-presence/main/.github/images/create-user.png)
     - Create a docker-compose file with the following contents:
       
       ```yaml
