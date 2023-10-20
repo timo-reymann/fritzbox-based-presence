@@ -7,7 +7,7 @@ RUN if [[ "$(arch)" == "x86_64" ]]; then \
     fi; \
     cp /binaries/fritzbox-based-presence_linux-${architecture} /bin/fritzbox-based-presence && \
     chmod +x /bin/fritzbox-based-presence && \
-    chown 1000:1000 /bin/fritzbox-based-presence
+    chown 65532:65532 /bin/fritzbox-based-presence
 
 FROM scratch
 LABEL org.opencontainers.image.title="fritzbox-based-presence"
@@ -19,6 +19,8 @@ LABEL org.opencontainers.image.authors="Timo Reymann <mail@timo-reymann.de>"
 LABEL org.opencontainers.image.url="https://github.com/timo-reymann/fritzbox-based-presence"
 LABEL org.opencontainers.image.documentation="https://github.com/timo-reymann/fritzbox-based-presence"
 LABEL org.opencontainers.image.source="https://github.com/timo-reymann/fritzbox-based-presence.git"
-COPY --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=gcr.io/distroless/static-debian12:nonroot / /
+USER nonroot
 COPY --from=bin /bin/fritzbox-based-presence /bin/fritzbox-based-presence
 ENTRYPOINT ["/bin/fritzbox-based-presence"]
+
