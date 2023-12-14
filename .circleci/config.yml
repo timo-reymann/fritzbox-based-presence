@@ -10,7 +10,7 @@ orbs:
   github-cli: circleci/github-cli@2.2.0
   docker: circleci/docker@2.4.0
   codecov: codecov/codecov@3.3.0
-  go: circleci/go@1.9.0
+  go: circleci/go@1.10.0
 
 executors:
   go:
