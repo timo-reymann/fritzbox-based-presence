@@ -1,6 +1,6 @@
 module github.com/timo-reymann/fritzbox-based-presence
 
-go 1.21.6
+go 1.21.7
 
 require (
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
