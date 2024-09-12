@@ -44,7 +44,7 @@ fritzbox-based-presence
     - Create a user under `System > Fritz!Box Users`
       ![Create user](https://raw.githubusercontent.com/timo-reymann/fritzbox-based-presence/main/.github/images/create-user.png)
     - Create a docker-compose file with the following contents:
-      
+
       ```yaml
       version: "3.5"
       services:
@@ -81,19 +81,35 @@ If you want to use the telegram functionality, follow this guide.
     3. Give it a username ending in `bot` e.g. `my_home_stalker_bot
     4. Copy the token you get, you will need it later
 2. Set up some sugar
-   1. `/setcommands`
-   2. `@your_bot_name`
-   3.
+    1. `/setcommands`
+    2. `@your_bot_name`
+    3.
    ```text
       start - Establish SkyNet
       home - See who is home
       online - See who is currently connected to your home
       ```
-   5. `/setuserpic`
-   6. Send the bot the profile picture you want to see
+    5. `/setuserpic`
+    6. Send the bot the profile picture you want to see
 3. Configure the service
     1. Set the env var `FB_PRESENCE__TELEGRAM_BOT_TOKEN` to the token you received
     2. Set `FB_PRESENCE__TELEGRAM_BOT_ALLOWED_USERS` to a comma seperated list of users that should be allowed to use
+       the bot
+
+### Setup discord bot
+
+1. Create the application & bot for discord
+   1. Make sure you’re logged on to the Discord website.
+   2. Navigate to the [application page](https://discord.com/developers/applications)
+   3. Click on the “New Application” button.
+   4. Give the application a name and click “Create”.
+   5. Navigate to the “Bot” tab to configure it.
+   6. Make sure that Public Bot is unticked.
+   7. You should also make sure that Require OAuth2 Code Grant is unchecked
+   8. Copy the token using the “Copy” button.
+2. Configure the service
+    1. Set the env var `FB_PRESENCE__DISCORD_BOT_TOKEN` to the token you received
+    2. Set `FB_PRESENCE__DISCROD_BOT_ALLOWED_USERS` to a comma seperated list of users that should be allowed to use
        the bot
 
 ## Motivation

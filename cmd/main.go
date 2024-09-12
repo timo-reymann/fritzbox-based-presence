@@ -4,6 +4,7 @@ import (
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/buildinfo"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/integrations/discord"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/integrations/telegram"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/server"
@@ -39,10 +40,19 @@ func Run() {
 	if telegram.IsEnabled() {
 		integration, err := telegram.New(client)
 		if err != nil {
-			log.Print(log.CompTelegram, "Failed to start bot feature: "+err.Error())
+			log.Print(log.CompTelegram, "Failed to start telegram bot feature: "+err.Error())
 		} else {
-			log.Print(log.CompTelegram, "Listening for messages ...")
+			log.Print(log.CompTelegram, "Listening for telegram messages ...")
 			go integration.ListenForMessages()
+		}
+	}
+
+	if discord.IsEnabled() {
+		_, err := discord.New(client)
+		if err != nil {
+			log.Print(log.CompDiscord, "Failed to start discord bot feature: "+err.Error())
+		} else {
+			log.Print(log.CompDiscord, "Listening for discord messages ...")
 		}
 	}
 

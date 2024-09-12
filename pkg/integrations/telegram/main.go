@@ -4,14 +4,15 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/config"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/fritzbox_requests"
+	"github.com/timo-reymann/fritzbox-based-presence/pkg/integrations"
 	"github.com/timo-reymann/fritzbox-based-presence/pkg/log"
 	"slices"
 	"strconv"
 	"strings"
 )
 
-const WhatsMyJobGif = tgbotapi.FileURL("https://media.giphy.com/media/Fsn4WJcqwlbtS/giphy.gif")
-const NoOneHomeGif = tgbotapi.FileURL("https://media.giphy.com/media/JNyMgedPfbtwGcX8rw/giphy-downsized-large.gif")
+const WhatsMyJobGif = tgbotapi.FileURL(integrations.NoOneHomeGifUrl)
+const NoOneHomeGif = tgbotapi.FileURL(integrations.WhatsMyJobGifUrl)
 
 type Integration struct {
 	bot            *tgbotapi.BotAPI
@@ -69,7 +70,7 @@ func (i *Integration) start(update *tgbotapi.Update) {
 func (i *Integration) whoIsOnline(u *tgbotapi.Update) {
 	devices, err := fritzbox_requests.GetNetDevices(i.fritzBoxClient)
 	if err != nil {
-		i.reply(u.Message, "💥 Can no list online users, try again later")
+		i.reply(u.Message, "💥 Can not list online users, try again later")
 		return
 	}
 

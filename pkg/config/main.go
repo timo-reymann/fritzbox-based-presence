@@ -35,6 +35,10 @@ type AppConfig struct {
 	TelegramBotToken string `required:"false" split_words:"true"`
 	// TelegramBotAllowedUsers is the list of usernames allowed to talk to the bot
 	TelegramBotAllowedUsers []string `required:"false" split_words:"true"`
+	// DiscordBotToken is the token to authenticate for discord API requests
+	DiscordBotToken string `required:"false" split_words:"true"`
+	// DiscordBotAllowedUsers is the list of usernames or IDs allowed to talk to the bot
+	DiscordBotAllowedUsers []string `required:"false" split_words:"true"`
 }
 
 var config AppConfig

@@ -6,4 +6,5 @@ const (
 	CompAuth     = "auth"
 	CompCli      = "cli"
 	CompServer   = "server"
+	CompDiscord  = "discord"
 )
