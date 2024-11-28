@@ -49,13 +49,13 @@ jobs:
     executor: go
     steps:
       - checkout
-      - go/load-cache
-      - run:
-          name: Build binaries
-          command: |
-            make build -j 2
-            make create-checksums
-      - go/save-cache
+      - go/with-cache:
+          steps:
+            - run:
+                name: Build binaries
+                command: |
+                  make build -j 2
+                  make create-checksums
       - persist_to_workspace:
           root: ./
           paths:
