@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.24.3
 
 require (
-	github.com/bwmarrin/discordgo v0.28.1
+	github.com/bwmarrin/discordgo v0.29.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/philippfranke/go-fritzbox v0.0.0-20150306111818-ef55d262b15a
