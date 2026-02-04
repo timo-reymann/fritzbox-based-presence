@@ -2,7 +2,7 @@ module github.com/timo-reymann/fritzbox-based-presence
 
 go 1.24.0
 
-toolchain go1.25.2
+toolchain go1.25.7
 
 require (
 	github.com/bwmarrin/discordgo v0.29.0
