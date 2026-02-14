@@ -10,7 +10,8 @@ RUN if [[ "$(arch)" == "x86_64" ]]; then \
     chown 65532:65532 /bin/fritzbox-based-presence
 
 FROM scratch
-LABEL org.opencontainers.image.title="fritzbox-based-presence"
+LABEL 
+LABEL org.opencontainers.image.licenses="gpl-3.0"org.opencontainers.image.title="fritzbox-based-presence"
 LABEL org.opencontainers.image.description="Show who is home based on devices connected to FritzBox that are currently online."
 LABEL org.opencontainers.image.ref.name="main"
 LABEL org.opencontainers.image.licenses='GNU GPL v3'
